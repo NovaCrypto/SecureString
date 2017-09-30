@@ -2,6 +2,7 @@ package io.github.novacrypto;
 
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -40,6 +41,7 @@ final class SecureCharBuffer {
         final byte bytes[] = new byte[key.capacity()];
         random.nextBytes(bytes);
         key.put(bytes);
+        Arrays.fill(bytes, (byte) 0);
     }
 
     SecureCharBuffer() {
