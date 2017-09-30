@@ -2,12 +2,8 @@ package io.github.novacrypto;
 
 import org.junit.Test;
 
-import java.nio.ByteBuffer;
-
 import static io.github.novacrypto.TestHelpers.*;
-import static io.github.novacrypto.WhiteBox.getFromPrivateField;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public final class SecureByteBufferTests {
 
@@ -72,59 +68,4 @@ public final class SecureByteBufferTests {
         appendASCIIString(buffer, "abc");
         assertEquals("abc", bytesToASCIIString(readWholeBufferAsByteArray(buffer)));
     }
-
-    @Test
-    public void whiteBoxTest_dataInBufferIsObscured() {
-        SecureByteBuffer buffer = new SecureByteBuffer();
-        appendASCIIString(buffer, "plain text");
-        assertNotEquals("plain text", readAllAsString(getDataBuffer(buffer)));
-    }
-
-    @Test
-    public void whiteBoxTest_dataInBufferIsEncryptedWithKey() {
-        SecureByteBuffer buffer = new SecureByteBuffer();
-        appendASCIIString(buffer, "plain text");
-        assertEquals("plain text",
-                bytesToASCIIString(
-                        xorDecrypt(
-                                readInToByteArray(getDataBuffer(buffer)),
-                                readInToByteArray(getKeyBuffer(buffer)
-                                ))));
-    }
-
-    private static ByteBuffer getDataBuffer(SecureByteBuffer buffer) {
-        return (ByteBuffer) getFromPrivateField(buffer, "data");
-    }
-
-    private static ByteBuffer getKeyBuffer(SecureByteBuffer buffer) {
-        return (ByteBuffer) getFromPrivateField(buffer, "key");
-    }
-
-    /**
-     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureByteBuffer}.
-     */
-    private static void appendASCIIString(final SecureByteBuffer buffer, final CharSequence data) {
-        final int length = data.length();
-        for (int i = 0; i < length; i++) {
-            buffer.append((byte) (data.charAt(i)));
-        }
-    }
-
-    private static String bytesToASCIIString(byte[] bytes) {
-        final char[] chars = new char[bytes.length];
-        for (int i = 0; i < chars.length; i++) {
-            chars[i] = (char) (bytes[i]);
-        }
-        return new String(chars);
-    }
-
-    private static byte[] readWholeBufferAsByteArray(final SecureByteBuffer buffer) {
-        final byte[] bytes = new byte[buffer.length()];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = buffer.get(i);
-        }
-        return bytes;
-    }
-
-
 }

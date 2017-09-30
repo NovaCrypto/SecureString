@@ -53,4 +53,51 @@ final class TestHelpers {
         }
         return bytes;
     }
+
+    /**
+     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureCharBuffer}.
+     */
+    static void appendString(final SecureCharBuffer buffer, final CharSequence data) {
+        final int length = data.length();
+        for (int i = 0; i < length; i++) {
+            buffer.append(data.charAt(i));
+        }
+    }
+
+    /**
+     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureByteBuffer}.
+     */
+    static void appendASCIIString(final SecureByteBuffer buffer, final CharSequence data) {
+        final int length = data.length();
+        for (int i = 0; i < length; i++) {
+            buffer.append((byte) (data.charAt(i)));
+        }
+    }
+
+    static String bytesToASCIIString(byte[] bytes) {
+        final char[] chars = new char[bytes.length];
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = (char) (bytes[i]);
+        }
+        return new String(chars);
+    }
+
+    static byte[] readWholeBufferAsByteArray(final SecureByteBuffer buffer) {
+        final byte[] bytes = new byte[buffer.length()];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = buffer.get(i);
+        }
+        return bytes;
+    }
+
+    /**
+     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureCharBuffer}.
+     */
+    static String readWholeBufferAsString(final SecureCharBuffer buffer) {
+        final char[] chars = new char[buffer.length()];
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = buffer.get(i);
+        }
+        return new String(chars);
+    }
 }
