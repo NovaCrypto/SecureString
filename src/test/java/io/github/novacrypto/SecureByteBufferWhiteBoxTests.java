@@ -15,7 +15,7 @@ public final class SecureByteBufferWhiteBoxTests {
     public void whiteBoxTest_dataInBufferIsObscured() {
         SecureByteBuffer buffer = new SecureByteBuffer();
         appendASCIIString(buffer, "plain text");
-        assertNotEquals("plain text", readAllAsString(getDataBuffer(buffer)));
+        assertNotEquals("plain text", asString(getDataBuffer(buffer)));
     }
 
     @Test
@@ -23,10 +23,10 @@ public final class SecureByteBufferWhiteBoxTests {
         SecureByteBuffer buffer = new SecureByteBuffer();
         appendASCIIString(buffer, "plain text");
         assertEquals("plain text",
-                bytesToASCIIString(
+                asASCIIString(
                         xorDecrypt(
-                                readInToByteArray(getDataBuffer(buffer)),
-                                readInToByteArray(getKeyBuffer(buffer)
+                                asByteArray(getDataBuffer(buffer)),
+                                asByteArray(getKeyBuffer(buffer)
                                 ))));
     }
 

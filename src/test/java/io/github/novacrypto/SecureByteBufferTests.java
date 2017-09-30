@@ -66,6 +66,6 @@ public final class SecureByteBufferTests {
     public void canReadManyChars() {
         SecureByteBuffer buffer = new SecureByteBuffer();
         appendASCIIString(buffer, "abc");
-        assertEquals("abc", bytesToASCIIString(readWholeBufferAsByteArray(buffer)));
+        assertEquals("abc", asASCIIString(readWholeBufferAsByteArray(buffer)));
     }
 }
