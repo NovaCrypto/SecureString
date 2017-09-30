@@ -12,8 +12,18 @@ final class WhiteBox {
 
     /**
      * Finds the contents of a private field.
+     * If path includes one of more '.' will do so recursively.
+     * Restores fields accessible state.
      */
-    static Object getFromPrivateField(final Object object, final String fieldName) {
+    static Object getFromPrivateField(final Object object, final String fieldNamePath) {
+        Object result = object;
+        for (String fieldName : fieldNamePath.split("\\.")) {
+            result = getPrivateFieldValue(result, fieldName);
+        }
+        return result;
+    }
+
+    private static Object getPrivateFieldValue(final Object object, final String fieldName) {
         try {
             final Field declaredField = object.getClass().getDeclaredField(fieldName);
             final boolean wasAccessible = declaredField.isAccessible();

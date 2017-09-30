@@ -4,8 +4,10 @@ import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
+import static io.github.novacrypto.TestHelpers.*;
 import static io.github.novacrypto.WhiteBox.getFromPrivateField;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public final class SecureCharBufferTests {
 
@@ -68,30 +70,30 @@ public final class SecureCharBufferTests {
     public void canReadManyChars() {
         SecureCharBuffer buffer = new SecureCharBuffer();
         appendString(buffer, "abc");
-        assertEquals("abc", readInToString(buffer));
+        assertEquals("abc", readWholeBufferAsString(buffer));
     }
 
     @Test
     public void whiteBoxTest_dataInBufferIsObscured() {
         SecureCharBuffer buffer = new SecureCharBuffer();
         appendString(buffer, "plain text");
-        assertNotEquals("plain text", readInToString(getDataBuffer(buffer)));
+        assertNotEquals("plain text", readAllAsString(getDataBuffer(buffer)));
     }
 
     @Test
     public void whiteBoxTest_dataInBufferIsEncryptedWithKey() {
         SecureCharBuffer buffer = new SecureCharBuffer();
         appendString(buffer, "plain text");
-        assertEquals("plain text", bytesToString(xorDecrypt(readInToByteArray(getDataBuffer(buffer)), readInToByteArray(getKeyBuffer(buffer)))));
+        assertEquals("plain text", bytesToString(xorDecrypt(readAllAsByteArray(getDataBuffer(buffer)), readAllAsByteArray(getKeyBuffer(buffer)))));
     }
 
 
     private static ByteBuffer getDataBuffer(SecureCharBuffer buffer) {
-        return (ByteBuffer) getFromPrivateField(buffer, "data");
+        return (ByteBuffer) getFromPrivateField(buffer, "buffer.data");
     }
 
     private static ByteBuffer getKeyBuffer(SecureCharBuffer buffer) {
-        return (ByteBuffer) getFromPrivateField(buffer, "key");
+        return (ByteBuffer) getFromPrivateField(buffer, "buffer.key");
     }
 
     /**
@@ -107,46 +109,12 @@ public final class SecureCharBufferTests {
     /**
      * This is just a helper function in tests because using String defeats the security benefits of {@link SecureCharBuffer}.
      */
-    private static String readInToString(final SecureCharBuffer buffer) {
+    private static String readWholeBufferAsString(final SecureCharBuffer buffer) {
         final char[] chars = new char[buffer.length()];
         for (int i = 0; i < chars.length; i++) {
             chars[i] = buffer.get(i);
         }
         return new String(chars);
-    }
-
-    /**
-     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureCharBuffer}.
-     */
-    private static String readInToString(final ByteBuffer buffer) {
-        final byte[] bytes = readInToByteArray(buffer);
-        return bytesToString(bytes);
-    }
-
-    private static String bytesToString(byte[] bytes) {
-        assertEquals("Expect to be even", 0, bytes.length % 2);
-        final char[] chars = new char[bytes.length / 2];
-        for (int i = 0; i < chars.length; i++) {
-            chars[i] = (char) (bytes[i * 2] << 8 | bytes[i * 2 + 1]);
-        }
-        return new String(chars);
-    }
-
-    private static byte[] readInToByteArray(final ByteBuffer buffer) {
-        final byte[] bytes = new byte[buffer.position()];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = buffer.get(i);
-        }
-        return bytes;
-    }
-
-    private static byte[] xorDecrypt(final byte[] data, final byte[] key) {
-        assertTrue(data.length <= key.length);
-        final byte[] bytes = new byte[data.length];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) (data[i] ^ key[i]);
-        }
-        return bytes;
     }
 
 }
