@@ -6,13 +6,13 @@ import java.io.Closeable;
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
-final class SecureCharBuffer implements Closeable {
+public final class SecureCharBuffer implements Closeable {
 
     /**
      * @param capacity maximum number of chars for buffer to store
      * @return a new {@link SecureCharBuffer} instance
      */
-    static SecureCharBuffer withCapacity(int capacity) {
+    public static SecureCharBuffer withCapacity(int capacity) {
         return new SecureCharBuffer(capacity);
     }
 
@@ -22,7 +22,7 @@ final class SecureCharBuffer implements Closeable {
         buffer = SecureByteBuffer.withCapacity(capacity * 2);
     }
 
-    SecureCharBuffer() {
+    public SecureCharBuffer() {
         this(512);
     }
 

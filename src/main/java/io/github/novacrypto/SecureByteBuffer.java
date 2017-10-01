@@ -10,13 +10,13 @@ import java.util.Random;
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
-final class SecureByteBuffer implements Closeable {
+public final class SecureByteBuffer implements Closeable {
 
     /**
      * @param capacity maximum number of chars for buffer to store
      * @return a new {@link SecureByteBuffer} instance
      */
-    static SecureByteBuffer withCapacity(int capacity) {
+    public static SecureByteBuffer withCapacity(int capacity) {
         return new SecureByteBuffer(capacity);
     }
 
@@ -44,7 +44,7 @@ final class SecureByteBuffer implements Closeable {
         Arrays.fill(bytes, (byte) 0);
     }
 
-    SecureByteBuffer() {
+    public SecureByteBuffer() {
         this(1024);
     }
 
