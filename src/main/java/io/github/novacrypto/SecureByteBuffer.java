@@ -32,8 +32,8 @@ final class SecureByteBuffer implements Closeable {
     /**
      * Direct buffers are outside of garbage collection.
      */
-    private static ByteBuffer allocatePinnedBuffer(int byteCapacity) {
-        return ByteBuffer.allocateDirect(byteCapacity);
+    private static ByteBuffer allocatePinnedBuffer(int capacity) {
+        return ByteBuffer.allocateDirect(capacity);
     }
 
     private static void populateBufferWithSecureKeyData(ByteBuffer key) {

@@ -6,10 +6,21 @@ import java.nio.ByteBuffer;
 
 import static io.github.novacrypto.TestHelpers.*;
 import static io.github.novacrypto.WhiteBox.getFromPrivateField;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public final class SecureByteBufferWhiteBoxTests {
+
+    @Test
+    public void whiteBoxTest_keyBufferIsDirect() {
+        SecureByteBuffer buffer = new SecureByteBuffer();
+        assertTrue(getKeyBuffer(buffer).isDirect());
+    }
+
+    @Test
+    public void whiteBoxTest_dataBufferIsNotDirect() {
+        SecureByteBuffer buffer = new SecureByteBuffer();
+        assertTrue(getDataBuffer(buffer).isDirect());
+    }
 
     @Test
     public void whiteBoxTest_dataInBufferIsObscured() {
