@@ -48,19 +48,19 @@ public final class SecureByteBuffer implements Closeable {
         this(1024);
     }
 
-    void append(byte b) {
+    public void append(byte b) {
         data.put((byte) (b ^ key.get(data.position())));
     }
 
-    int length() {
+    public int length() {
         return data.position();
     }
 
-    byte get(int i) {
+    public byte get(int i) {
         return (byte) (data.get(i) ^ key.get(i));
     }
 
-    int capacity() {
+    public int capacity() {
         return data.capacity();
     }
 

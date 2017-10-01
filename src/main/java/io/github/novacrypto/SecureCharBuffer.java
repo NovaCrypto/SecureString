@@ -26,25 +26,25 @@ public final class SecureCharBuffer implements Closeable {
         this(512);
     }
 
-    void append(char c) {
+    public void append(char c) {
         final byte msb = (byte) (c >> 8);
         final byte lsb = (byte) (c & 0xff);
         buffer.append(msb);
         buffer.append(lsb);
     }
 
-    int length() {
+    public int length() {
         return buffer.length() / 2;
     }
 
-    char get(int i) {
+    public char get(int i) {
         final int position = i * 2;
         final byte msb = buffer.get(position);
         final byte lsb = buffer.get(position + 1);
         return (char) ((msb << 8) | lsb);
     }
 
-    int capacity() {
+    public int capacity() {
         return buffer.capacity() / 2;
     }
 
