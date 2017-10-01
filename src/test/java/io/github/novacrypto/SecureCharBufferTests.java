@@ -20,7 +20,7 @@ public final class SecureCharBufferTests {
     }
 
     @Test
-    public void overrideCapacity() {
+    public void canSpecifyCapacity() {
         SecureCharBuffer buffer = SecureCharBuffer.withCapacity(10);
         assertEquals(10, buffer.capacity());
     }
