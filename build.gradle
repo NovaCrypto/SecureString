@@ -4,7 +4,7 @@ plugins {
 apply plugin: 'maven-publish'
 
 group 'io.github.novacrypto'
-version '0.1.5-SNAPSHOT'
+version '0.1.5'
 
 apply plugin: 'java'
 
@@ -16,12 +16,34 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
 publishing {
     publications {
         MyPublication(MavenPublication) {
             groupId group
             artifactId 'SecureString'
             version project.version
+            artifact("$buildDir/libs/securestring-${project.version}-sources.jar"){
+                classifier = 'sources'
+            }
+            artifact("$buildDir/libs/securestring-${project.version}-javadoc.jar"){
+                classifier = 'javadoc'
+            }
             artifact("$buildDir/libs/securestring-${project.version}.jar")
         }
     }
