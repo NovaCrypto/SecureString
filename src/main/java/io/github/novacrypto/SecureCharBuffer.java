@@ -1,10 +1,12 @@
 package io.github.novacrypto;
 
+import java.io.Closeable;
+
 /**
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
-final class SecureCharBuffer {
+final class SecureCharBuffer implements Closeable {
 
     /**
      * @param capacity maximum number of chars for buffer to store
@@ -44,5 +46,9 @@ final class SecureCharBuffer {
 
     int capacity() {
         return buffer.capacity() / 2;
+    }
+
+    public void close() {
+        buffer.close();
     }
 }

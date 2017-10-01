@@ -1,5 +1,6 @@
 package io.github.novacrypto;
 
+import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.Random;
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
-final class SecureByteBuffer {
+final class SecureByteBuffer implements Closeable {
 
     /**
      * @param capacity maximum number of chars for buffer to store
@@ -56,10 +57,16 @@ final class SecureByteBuffer {
     }
 
     byte get(int i) {
-        return  (byte) (data.get(i) ^ key.get(i));
+        return (byte) (data.get(i) ^ key.get(i));
     }
 
     int capacity() {
         return data.capacity();
+    }
+
+    public void close() {
+        data.position(0);
+        key.position(0);
+        data.put(key);
     }
 }
