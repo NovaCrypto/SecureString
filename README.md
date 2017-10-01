@@ -4,10 +4,15 @@
 
 ```
 repositories {
-    jcenter()
+    maven {
+        url 'https://dl.bintray.com/novacrypto/SecureString/'
+    }
 }
 
 dependencies {
-    compile 'io.github.novacrypto:SecureString:0.1.2@jar'
+    compile 'io.github.novacrypto:SecureString:0.1.3@jar'
 }
+
 ```
+
+`jcenter()` repo coming soon hopefully.
