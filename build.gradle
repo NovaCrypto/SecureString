@@ -1,14 +1,44 @@
+plugins {
+    id 'com.jfrog.bintray' version '1.7.3'
+}
+apply plugin: 'maven-publish'
+
 group 'io.github.novacrypto'
-version '1.0-SNAPSHOT'
+version '0.1.2'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
-
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            groupId group
+            artifactId 'SecureString'
+            version project.version
+            artifact("$buildDir/libs/securestring-${version}.jar")
+        }
+    }
+}
+
+// To upload a new version
+// ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
+bintray {
+    user = property('user')
+    key = property('key')
+    publications = ['MyPublication']
+    pkg {
+        repo = 'SecureString'
+        name = 'SecureString'
+        userOrg = 'novacrypto'
+        licenses = ['Unlicence']
+        vcsUrl = 'https://github.com/NovaCrypto/SecureString.git'
+        version project.version
+    }
 }
