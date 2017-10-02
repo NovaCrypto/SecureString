@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.novacrypto:SecureString:0.1.4@jar'
+    compile 'io.github.novacrypto:SecureString:0.1.5@jar'
 }
 
 ```
