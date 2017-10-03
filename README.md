@@ -4,17 +4,63 @@ Read the motivation here: [Protecting Strings in JVM memory](https://medium.com/
 
 # Install
 
+Use either of these repositories:
+
+```
+repositories {
+    jcenter()
+}
+```
+
+Or:
+
 ```
 repositories {
     maven {
         url 'https://dl.bintray.com/novacrypto/SecureString/'
     }
 }
+```
 
+Add dependency:
+
+```
 dependencies {
     compile 'io.github.novacrypto:SecureString:0.1.5@jar'
 }
 
 ```
 
-`jcenter()` repo coming soon hopefully.
+# Usage
+## Create
+
+```
+new SecureCharBuffer()
+```
+
+For default capacity or 512 chars, or specify capacity with:
+
+```
+SecureCharBuffer.withCapacity(30)
+```
+
+## Append
+
+```
+buffer.append('a')
+```
+
+## Read
+
+```
+final int length = buffer.length();
+for (int i = 0; i < length; i++) {
+    buffer.get(i)
+}
+```
+
+## Clear
+
+```
+buffer.close()
+```
