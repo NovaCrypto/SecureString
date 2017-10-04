@@ -52,8 +52,8 @@ publishing {
 // To upload a new version
 // ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
 bintray {
-    user = property('user')
-    key = property('key')
+    user = project.ext.properties.user
+    key = project.ext.properties.key
     publications = ['MyPublication']
     pkg {
         repo = 'SecureString'
