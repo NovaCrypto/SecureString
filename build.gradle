@@ -4,7 +4,7 @@ plugins {
 apply plugin: 'maven-publish'
 
 group 'io.github.novacrypto'
-version '0.1.6-SNAPSHOT'
+version '0.1.6'
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
@@ -51,7 +51,8 @@ publishing {
 }
 
 // To upload a new version
-// ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
+// ./gradlew clean
+// ./gradlew build bintrayUpload -Puser=user -Pkey=APIKEY
 bintray {
     user = project.ext.properties.user
     key = project.ext.properties.key

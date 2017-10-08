@@ -26,7 +26,7 @@ Add dependency:
 
 ```
 dependencies {
-    compile 'io.github.novacrypto:SecureString:0.1.5@jar'
+    compile 'io.github.novacrypto:SecureString:0.1.6@jar'
 }
 
 ```
@@ -48,9 +48,14 @@ SecureCharBuffer.withCapacity(30)
 
 ```
 buffer.append('a')
+buffer.append("abc")
+buffer.append(charSequence)
 ```
 
 ## Read
+
+Can be used wherever a `CharSequence` can, but refuses to allow `toString` as that defeats the point, so you will get a `UnsupportedOperationException` if you try, so you must manually copy if you absolutely have to have this:
+
 
 ```
 final int length = buffer.length();
