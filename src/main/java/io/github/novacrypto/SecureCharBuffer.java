@@ -6,7 +6,7 @@ import java.io.Closeable;
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
-public final class SecureCharBuffer implements Closeable {
+public final class SecureCharBuffer implements Closeable, CharSequence {
 
     /**
      * @param capacity maximum number of chars for buffer to store
@@ -44,11 +44,24 @@ public final class SecureCharBuffer implements Closeable {
         return buffer.length() / 2;
     }
 
-    public char get(int i) {
-        final int position = i * 2;
+    public char charAt(int index) {
+        final int position = index * 2;
         final byte msb = buffer.get(position);
         final byte lsb = buffer.get(position + 1);
         return (char) ((msb << 8) | lsb);
+    }
+
+    public CharSequence subSequence(final int start, final int end) {
+        return ProxyCharSequence
+                .secureSubSequenceProxy(this, start, end);
+    }
+
+    /**
+     * @param i
+     * @return same as charAt, provides indexer syntax in Kotlin
+     */
+    public char get(int i) {
+        return charAt(i);
     }
 
     public int capacity() {
@@ -57,5 +70,10 @@ public final class SecureCharBuffer implements Closeable {
 
     public void close() {
         buffer.close();
+    }
+
+    @Override
+    public String toString() {
+        throw new UnsupportedOperationException();
     }
 }

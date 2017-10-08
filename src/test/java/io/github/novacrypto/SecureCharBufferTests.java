@@ -51,7 +51,8 @@ public final class SecureCharBufferTests {
         SecureCharBuffer buffer = new SecureCharBuffer();
         buffer.append('a');
         assertEquals(1, buffer.length());
-        assertEquals('a', buffer.get(0));
+        final int i = 0;
+        assertEquals('a', readCharAt(buffer, i));
     }
 
     @Test
@@ -59,7 +60,7 @@ public final class SecureCharBufferTests {
         SecureCharBuffer buffer = new SecureCharBuffer();
         buffer.append('z');
         assertEquals(1, buffer.length());
-        assertEquals('z', buffer.get(0));
+        assertEquals('z', readCharAt(buffer, 0));
     }
 
     @Test
@@ -89,6 +90,13 @@ public final class SecureCharBufferTests {
         for (int i = 0; i < read.length(); i++) {
             assertEquals('\0', read.charAt(i));
         }
+    }
+
+    private static char readCharAt(SecureCharBuffer buffer, int index) {
+        final char c1 = buffer.get(index);
+        final char c2 = buffer.charAt(index);
+        assertEquals(c1, c2);
+        return c1;
     }
 
 }
