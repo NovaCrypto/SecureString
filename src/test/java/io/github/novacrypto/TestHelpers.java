@@ -50,16 +50,6 @@ final class TestHelpers {
     }
 
     /**
-     * This is just a helper function in tests because using String defeats the security benefits of {@link SecureCharBuffer}.
-     */
-    static void appendString(final SecureCharBuffer buffer, final CharSequence data) {
-        final int length = data.length();
-        for (int i = 0; i < length; i++) {
-            buffer.append(data.charAt(i));
-        }
-    }
-
-    /**
      * Write the least significant byte of each {@link char} to the buffer.
      * If the string is just ASCII, this will not lose any data.
      */
