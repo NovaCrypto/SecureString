@@ -33,6 +33,13 @@ public final class SecureCharBuffer implements Closeable {
         buffer.append(lsb);
     }
 
+    public void append(final CharSequence data) {
+        final int length = data.length();
+        for (int i = 0; i < length; i++) {
+            append(data.charAt(i));
+        }
+    }
+
     public int length() {
         return buffer.length() / 2;
     }

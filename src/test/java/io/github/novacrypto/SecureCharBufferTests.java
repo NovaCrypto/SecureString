@@ -2,7 +2,7 @@ package io.github.novacrypto;
 
 import org.junit.Test;
 
-import static io.github.novacrypto.TestHelpers.*;
+import static io.github.novacrypto.TestHelpers.readWholeBufferAsString;
 import static org.junit.Assert.assertEquals;
 
 public final class SecureCharBufferTests {
@@ -63,16 +63,25 @@ public final class SecureCharBufferTests {
     }
 
     @Test
+    public void canAppendCharSequences() {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        buffer.append("abc");
+        final CharSequence def = "def";
+        buffer.append(def);
+        assertEquals("abcdef", readWholeBufferAsString(buffer));
+    }
+
+    @Test
     public void canReadManyChars() {
         SecureCharBuffer buffer = new SecureCharBuffer();
-        appendString(buffer, "abc");
+        buffer.append("abc");
         assertEquals("abc", readWholeBufferAsString(buffer));
     }
 
     @Test
     public void dataIsZeroedOutAfterClose() {
         SecureCharBuffer buffer = new SecureCharBuffer();
-        appendString(buffer, "abc");
+        buffer.append("abc");
         buffer.close();
         final String read = readWholeBufferAsString(buffer);
         assertEquals(512, buffer.length());
