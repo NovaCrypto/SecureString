@@ -33,6 +33,8 @@ final class ProxyCharSequence implements CharSequence {
     }
 
     public char charAt(int index) {
+        if (index < 0 || index >= length())
+            throw new IndexOutOfBoundsException();
         return parent.charAt(index + start);
     }
 
