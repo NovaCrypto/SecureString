@@ -57,6 +57,8 @@ public final class SecureByteBuffer implements Closeable {
     }
 
     public byte get(int i) {
+        if (i >= length())
+            throw new IndexOutOfBoundsException();
         return (byte) (data.get(i) ^ key.get(i));
     }
 
