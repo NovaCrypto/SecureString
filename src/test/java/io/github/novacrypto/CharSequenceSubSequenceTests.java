@@ -10,10 +10,15 @@ import static org.junit.Assert.assertSame;
  */
 public final class CharSequenceSubSequenceTests {
 
+    private static SecureCharBuffer givenBufferContaining(String data) {
+        final SecureCharBuffer buffer = new SecureCharBuffer();
+        buffer.append(data);
+        return buffer;
+    }
+
     @Test
     public void wholeSequence() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("Hello World!");
+        final SecureCharBuffer buffer = givenBufferContaining("Hello World!");
         final CharSequence subSequence = buffer.subSequence(0, 12);
         assertSame(buffer, subSequence);
     }
@@ -26,26 +31,29 @@ public final class CharSequenceSubSequenceTests {
     }
 
     @Test
+    public void wholeSubSequence() {
+        final SecureCharBuffer buffer = givenBufferContaining("Hello World!");
+        final CharSequence subSequence = buffer.subSequence(3, 5);
+        assertSame(subSequence, subSequence.subSequence(0, 2));
+    }
+
+    @Test
     public void subSequence1() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("Hello World!");
+        final SecureCharBuffer buffer = givenBufferContaining("Hello World!");
         final CharSequence subSequence = buffer.subSequence(6, 11);
         assertEquals("Hello World!".subSequence(6, 11), fromSequence(subSequence));
     }
 
     @Test
     public void subSequence2() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         final CharSequence subSequence = buffer.subSequence(0, 4);
         assertEquals("NovaCrypto".subSequence(0, 4), fromSequence(subSequence));
     }
 
-
     @Test
     public void subSequenceClearsWithParent() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         final CharSequence subSequence = buffer.subSequence(0, 4);
         buffer.close();
         assertEquals("\0\0\0\0", fromSequence(subSequence));
@@ -53,8 +61,7 @@ public final class CharSequenceSubSequenceTests {
 
     @Test
     public void subSequenceOfSubSequence1() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         final CharSequence subSequence = buffer
                 .subSequence(1, 10)
                 .subSequence(3, 9);
@@ -66,8 +73,7 @@ public final class CharSequenceSubSequenceTests {
 
     @Test
     public void subSequenceOfSubSequence2() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         final CharSequence subSequence = buffer
                 .subSequence(2, 9)
                 .subSequence(2, 7);
@@ -79,53 +85,66 @@ public final class CharSequenceSubSequenceTests {
 
     @Test(expected = StringIndexOutOfBoundsException.class)
     public void subSequenceEndOutOfBounds() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         buffer.subSequence(0, 11);
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)
     public void subSequenceStartOutOfBounds() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         buffer.subSequence(11, 10);
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)
     public void startAheadOfEnd() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         buffer.subSequence(5, 4);
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)
     public void negativeStart() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         buffer.subSequence(-1, 4);
     }
 
     @Test
+    public void afterClose() {
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
+        final CharSequence subSequence = buffer.subSequence(0, 4);
+        buffer.close();
+        assertEquals("\0\0\0\0", fromSequence(subSequence));
+    }
+
+    @Test
+    public void afterCloseToStringAble() {
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
+        final CharSequence subSequence = buffer.toStringAble().subSequence(0, 4);
+        buffer.close();
+        assertEquals("\0\0\0\0", subSequence.toString());
+    }
+
+    @Test
+    public void afterCloseSubSequenceOfSubSequence() {
+        final String data = "NovaCrypto";
+        final SecureCharBuffer buffer = givenBufferContaining(data);
+        final CharSequence subSequence = buffer.subSequence(0, 4).subSequence(0, 2);
+        buffer.close();
+        assertEquals("\0\0", fromSequence(subSequence));
+    }
+
+    @Test
+    public void afterCloseToStringAbleSubSequenceOfSubSequence() {
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
+        final CharSequence subSequence = buffer.toStringAble().subSequence(0, 4).subSequence(0, 2);
+        buffer.close();
+        assertEquals("\0\0", subSequence.toString());
+    }
+
+    @Test
     public void zeroChars() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
+        final SecureCharBuffer buffer = givenBufferContaining("NovaCrypto");
         assertEquals("NovaCrypto".subSequence(5, 5),
                 fromSequence(buffer.subSequence(5, 5)));
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void cantToString() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
-        //noinspection ResultOfMethodCallIgnored
-        buffer.toString();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void cantToStringOnSubSequence() {
-        final SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("NovaCrypto");
-        buffer.subSequence(1, 2).toString();
     }
 
     private static String fromSequence(final CharSequence subSequence) {
@@ -135,6 +154,4 @@ public final class CharSequenceSubSequenceTests {
         }
         return sb.toString();
     }
-
-
 }
