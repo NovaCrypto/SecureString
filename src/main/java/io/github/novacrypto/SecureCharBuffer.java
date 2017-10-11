@@ -51,17 +51,28 @@ public final class SecureCharBuffer implements Closeable, CharSequence {
         return (char) ((msb << 8) | lsb);
     }
 
-    public CharSequence subSequence(final int start, final int end) {
-        return ProxyCharSequence
-                .secureSubSequenceProxy(this, start, end);
-    }
-
     /**
      * @param i
      * @return same as charAt, provides indexer syntax in Kotlin
      */
     public char get(int i) {
         return charAt(i);
+    }
+
+    public CharSequence subSequence(final int start, final int end) {
+        if (start == 0 && end == length())
+            return this;
+        return ProxyCharSequence
+                .secureSubSequenceProxy(this,
+                        start,
+                        end,
+                        ToStringStrategy.RESTRICT);
+    }
+
+    public CharSequence toStringAble() {
+        return ProxyCharSequence
+                .secureSubSequenceProxy(this, 0, length(),
+                        ToStringStrategy.ALLOW);
     }
 
     public int capacity() {

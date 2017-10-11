@@ -98,5 +98,4 @@ public final class SecureCharBufferTests {
         assertEquals(c1, c2);
         return c1;
     }
-
 }
