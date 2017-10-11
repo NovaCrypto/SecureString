@@ -74,7 +74,7 @@ public final class SecureByteBufferTests {
         SecureByteBuffer buffer = new SecureByteBuffer();
         appendASCIIString(buffer, "abc");
         buffer.close();
-        final byte[] read = readWholeBufferAsByteArray(buffer);
+        byte[] read = readWholeBufferAsByteArray(buffer);
         assertEquals(1024, buffer.length());
         assertEquals(1024, read.length);
         for (byte b : read) {

@@ -13,16 +13,17 @@ public final class SecureCharBufferWhiteBoxTests {
 
     @Test
     public void whiteBoxTest_dataInBufferIsObscured() {
-        SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("plain text");
+        SecureCharBuffer buffer = givenSecureCharBuffer("plain text");
         assertNotEquals("plain text", asString(getDataBuffer(buffer)));
     }
 
     @Test
     public void whiteBoxTest_dataInBufferIsEncryptedWithKey() {
-        SecureCharBuffer buffer = new SecureCharBuffer();
-        buffer.append("plain text");
-        assertEquals("plain text", TestHelpers.asString(xorDecrypt(asByteArray(getDataBuffer(buffer)), asByteArray(getKeyBuffer(buffer)))));
+        SecureCharBuffer buffer = givenSecureCharBuffer("plain text");
+        assertEquals("plain text",
+                TestHelpers.asString(
+                        xorDecrypt(asByteArray(getDataBuffer(buffer)),
+                                asByteArray(getKeyBuffer(buffer)))));
     }
 
     private static ByteBuffer getDataBuffer(SecureCharBuffer buffer) {

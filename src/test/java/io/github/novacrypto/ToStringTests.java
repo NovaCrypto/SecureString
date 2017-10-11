@@ -36,11 +36,22 @@ public final class ToStringTests {
     }
 
     @Test
-    public void toStringingTwiceDoesNotReturnsTheSameEnsuringCalculatedOnDemand() {
+    public void toStringingTwiceDoesNotReturnsTheSameEnsuringNotCached() {
         final SecureCharBuffer buffer = new SecureCharBuffer();
         buffer.append("NovaCrypto");
         CharSequence sequence = buffer.toStringAble();
         assertNotSame(sequence.toString(), sequence.toString());
+    }
+
+    @Test
+    public void toStringingAfterCloseDoesNotReturnsTheStringEnsuringCalculatedOnDemand() {
+        final SecureCharBuffer buffer = new SecureCharBuffer();
+        buffer.append("NovaCrypto");
+        CharSequence sequence = buffer.toStringAble();
+        final String first = sequence.toString();
+        buffer.close();
+        assertEquals("NovaCrypto", first);
+        assertEquals("\0\0\0\0\0\0\0\0\0\0", sequence.toString());
     }
 
     @Test
