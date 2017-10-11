@@ -26,7 +26,7 @@ Add dependency:
 
 ```
 dependencies {
-    compile 'io.github.novacrypto:SecureString:0.1.6@jar'
+    compile 'io.github.novacrypto:SecureString:0.1.7@jar'
 }
 
 ```
