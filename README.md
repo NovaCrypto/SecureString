@@ -38,7 +38,7 @@ dependencies {
 new SecureCharBuffer()
 ```
 
-For default capacity or 512 chars, or specify capacity with:
+For default capacity of 512 chars, or specify capacity with:
 
 ```
 SecureCharBuffer.withCapacity(30)
@@ -54,8 +54,7 @@ buffer.append(charSequence)
 
 ## Read
 
-Can be used wherever a `CharSequence` can, but refuses to allow `toString` as that defeats the point, so you will get a `UnsupportedOperationException` if you try, so you must manually copy if you absolutely have to have this:
-
+Can be used wherever a `CharSequence` can, so you can access the buffer one char at a time like so:
 
 ```
 final int length = buffer.length();
@@ -63,6 +62,27 @@ for (int i = 0; i < length; i++) {
     buffer.get(i)
 }
 ```
+
+It supports `CharSequence#subSequence` by creating a proxy. This means that you do not need to worry about sub-sequences leaking string data. Sub-sequences of sub-sequences are also cleared.
+
+```
+buffer = new SecureBuffer();
+buffer.append('a');
+buffer.append('b');
+buffer.append('c');
+CharSequence subBuffer = buffer.subSequence(1, 2);
+CharSequence subSubBuffer = subBuffer.subSequence(0, 1);
+buffer.close(); // subBuffer and subSubBuffer are also cleared
+```
+
+It does however refuse to allow `toString` as that defeats the point, so you will get a `UnsupportedOperationException` if you try. If you have to for whatever reason, then you can get a proxy that allows it by:
+
+```
+   CharSequence iCanToString = secureBuffer.toStringAble();
+   System.out.println(iCanToString.toString());
+```
+
+This `toString` generates on the demand, and does not cache the string value.
 
 ## Clear
 
