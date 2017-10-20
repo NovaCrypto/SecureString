@@ -52,11 +52,13 @@ public final class SecureCharBuffer implements Closeable, CharSequence {
     }
 
     /**
-     * @param i
-     * @return same as charAt, provides indexer syntax in Kotlin
+     * Same as {@link #charAt}, provides indexer syntax in Kotlin
+     *
+     * @param index 0-based index of char to fetch
+     * @return char at that index
      */
-    public char get(int i) {
-        return charAt(i);
+    public char get(int index) {
+        return charAt(index);
     }
 
     public CharSequence subSequence(final int start, final int end) {
