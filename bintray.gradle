@@ -50,7 +50,7 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
             groupId group
-            artifactId 'SecureString'
+            artifactId project.name
             version project.version
         }
     }
