@@ -1,13 +1,62 @@
-plugins {
-    id 'com.jfrog.bintray' version '1.7.3'
-}
-apply plugin: 'maven-publish'
+/*
+ *  SecureString library, Obfuscated/clearable in memory string management
+ *  Copyright (C) 2017-2018 Alan Evans, NovaCrypto
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *  Original source: https://github.com/NovaCrypto/SecureString
+ *  You can contact the authors via github issues.
+ */
 
-group 'io.github.novacrypto'
-version '0.1.8'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
+    }
+}
 
 apply plugin: 'java'
-apply plugin: 'jacoco'
+apply from: 'bintray.gradle'
+
+// Generate a dependency version update report for release
+// ./gradlew dependencyUpdates -Drevision=release
+// https://github.com/ben-manes/gradle-versions-plugin
+apply plugin: 'com.github.ben-manes.versions'
+
+group 'io.github.novacrypto'
+version '2018.10.06'
+
+// To upload a new version
+// ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
+bintray {
+    user = project.ext.properties.user
+    key = project.ext.properties.key
+    publications = ['MyPublication']
+    pkg {
+        repo = 'SecureString'
+        name = 'SecureString'
+        userOrg = 'novacrypto'
+        licenses = ['Unlicence']
+        vcsUrl = 'https://github.com/NovaCrypto/SecureString.git'
+        version {
+            name = project.version
+        }
+    }
+}
 
 repositories {
     jcenter()
@@ -19,64 +68,9 @@ compileJava {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'junit:junit:4.12'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            groupId group
-            artifactId 'SecureString'
-            version project.version
-            artifact("$buildDir/libs/securestring-${project.version}-sources.jar"){
-                classifier = 'sources'
-            }
-            artifact("$buildDir/libs/securestring-${project.version}-javadoc.jar"){
-                classifier = 'javadoc'
-            }
-            artifact("$buildDir/libs/securestring-${project.version}.jar")
-        }
-    }
-}
-
-// To upload a new version
-// ./gradlew clean
-// ./gradlew build bintrayUpload -Puser=user -Pkey=APIKEY
-bintray {
-    user = project.ext.properties.user
-    key = project.ext.properties.key
-    publications = ['MyPublication']
-    pkg {
-        repo = 'SecureString'
-        name = 'SecureString'
-        userOrg = 'novacrypto'
-        licenses = ['Unlicence']
-        vcsUrl = 'https://github.com/NovaCrypto/SecureString.git'
-        version project.version
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-
-check.dependsOn jacocoTestReport
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
