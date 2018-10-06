@@ -25,9 +25,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by aevans on 2017-10-11.
- */
 public final class ToStringStrategyTests {
 
     @Test

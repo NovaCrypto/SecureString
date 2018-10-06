@@ -27,9 +27,6 @@ import static io.github.novacrypto.TestHelpers.asString;
 import static io.github.novacrypto.TestHelpers.givenSecureCharBuffer;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by aevans on 2017-10-10.
- */
 public final class CharSequenceSubSequenceToStringTests {
 
     @Test(expected = UnsupportedOperationException.class)

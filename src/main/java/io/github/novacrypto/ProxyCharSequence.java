@@ -21,9 +21,6 @@
 
 package io.github.novacrypto;
 
-/**
- * Created by aevans on 2017-10-08.
- */
 final class ProxyCharSequence implements CharSequence {
     private final CharSequence parent;
     private final int start;

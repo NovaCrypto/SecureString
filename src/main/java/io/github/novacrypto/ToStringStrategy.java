@@ -21,9 +21,6 @@
 
 package io.github.novacrypto;
 
-/**
- * Created by aevans on 2017-10-09.
- */
 enum ToStringStrategy {
 
     RESTRICT {

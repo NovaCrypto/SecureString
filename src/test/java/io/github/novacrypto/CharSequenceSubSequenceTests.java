@@ -28,9 +28,6 @@ import static io.github.novacrypto.TestHelpers.givenSecureCharBuffer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-/**
- * Created by aevans on 2017-10-08.
- */
 public final class CharSequenceSubSequenceTests {
 
     @Test

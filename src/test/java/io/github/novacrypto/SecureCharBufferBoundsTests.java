@@ -25,9 +25,6 @@ import org.junit.Test;
 
 import static io.github.novacrypto.TestHelpers.givenSecureCharBuffer;
 
-/**
- * Created by aevans on 2017-10-10.
- */
 public final class SecureCharBufferBoundsTests {
 
     @Test(expected = IndexOutOfBoundsException.class)

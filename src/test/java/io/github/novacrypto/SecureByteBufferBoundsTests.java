@@ -25,9 +25,6 @@ import org.junit.Test;
 
 import static io.github.novacrypto.TestHelpers.appendASCIIString;
 
-/**
- * Created by aevans on 2017-10-10.
- */
 public final class SecureByteBufferBoundsTests {
 
     @Test(expected = IndexOutOfBoundsException.class)

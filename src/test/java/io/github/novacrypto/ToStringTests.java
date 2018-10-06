@@ -26,9 +26,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-/**
- * Created by aevans on 2017-10-10.
- */
 public final class ToStringTests {
 
     @Test(expected = UnsupportedOperationException.class)
