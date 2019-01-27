@@ -69,7 +69,7 @@ public final class SecureCharBuffer implements Closeable, CharSequence {
         final int position = index * 2;
         final byte msb = buffer.get(position);
         final byte lsb = buffer.get(position + 1);
-        return (char) ((msb << 8) | lsb);
+        return (char) (msb << 8 | lsb & 0xff);
     }
 
     /**

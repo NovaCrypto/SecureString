@@ -137,6 +137,18 @@ public final class SecureCharBufferTests {
         }
     }
 
+    @Test
+    public void readAndWriteAllLargeChars() {
+        SecureCharBuffer buffer = SecureCharBuffer.withCapacity(255 * 256);
+        for (int i = 256; i < 256 * 256; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(255 * 256, buffer.length());
+        for (int i = 256; i < 257; i++) {
+            assertEquals((char) i, readCharAt(buffer, i - 256));
+        }
+    }
+
     private static char readCharAt(SecureCharBuffer buffer, int index) {
         final char c1 = buffer.get(index);
         final char c2 = buffer.charAt(index);
