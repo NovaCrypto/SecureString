@@ -113,6 +113,30 @@ public final class SecureCharBufferTests {
         }
     }
 
+    @Test
+    public void readAndWriteAllBasicASCII() {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        for (int i = 0; i < 128; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(128, buffer.length());
+        for (int i = 0; i < 128; i++) {
+            assertEquals((char) i, readCharAt(buffer, i));
+        }
+    }
+
+    @Test
+    public void readAndWriteAllExtendedAscii() {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        for (int i = 128; i < 256; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(128, buffer.length());
+        for (int i = 128; i < 256; i++) {
+            assertEquals((char) i, readCharAt(buffer, i - 128));
+        }
+    }
+
     private static char readCharAt(SecureCharBuffer buffer, int index) {
         final char c1 = buffer.get(index);
         final char c2 = buffer.charAt(index);
