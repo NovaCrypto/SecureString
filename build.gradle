@@ -33,6 +33,9 @@ plugins {
     id 'com.github.spotbugs' version '1.6.9'
 }
 
+group 'io.github.novacrypto'
+version '2019.01.27'
+
 apply plugin: 'java'
 apply from: 'bintray.gradle'
 
@@ -54,15 +57,12 @@ allprojects {
     }
 }
 
-group 'io.github.novacrypto'
-version '2019.01.27'
-
 // To upload a new version
 // ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
 bintray {
     user = project.ext.properties.user
     key = project.ext.properties.key
-    publications = ['MyPublication']
+    publications = ['maven']
     pkg {
         repo = 'SecureString'
         name = 'SecureString'
