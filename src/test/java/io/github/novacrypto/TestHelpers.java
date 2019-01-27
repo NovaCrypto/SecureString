@@ -62,7 +62,7 @@ final class TestHelpers {
         assertEquals("Expect to be even", 0, bytes.length % 2);
         char[] chars = new char[bytes.length / 2];
         for (int i = 0; i < chars.length; i++) {
-            chars[i] = (char) (bytes[i * 2] << 8 | bytes[i * 2 + 1]);
+            chars[i] = (char) (bytes[i * 2] << 8 | (bytes[i * 2 + 1] & 0xff));
         }
         return new String(chars);
     }

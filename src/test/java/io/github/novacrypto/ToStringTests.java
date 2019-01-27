@@ -23,17 +23,18 @@ package io.github.novacrypto;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 public final class ToStringTests {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cantToString() {
         final SecureCharBuffer buffer = new SecureCharBuffer();
         buffer.append("NovaCrypto");
         //noinspection ResultOfMethodCallIgnored
-        String s = buffer.toString();
+        assertThatThrownBy(buffer::toString).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
