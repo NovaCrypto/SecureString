@@ -1,6 +1,6 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2018 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,21 +26,24 @@ import org.junit.Test;
 import static io.github.novacrypto.TestHelpers.asString;
 import static io.github.novacrypto.TestHelpers.givenSecureCharBuffer;
 import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 
 public final class CharSequenceSubSequenceToStringTests {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cantToStringOnSubSequence() {
         final SecureCharBuffer buffer = givenSecureCharBuffer("NovaCrypto");
+        final CharSequence subSequence = buffer.subSequence(1, 2);
         //noinspection ResultOfMethodCallIgnored
-        buffer.subSequence(1, 2).toString();
+        assertThatThrownBy(subSequence::toString).isInstanceOf(UnsupportedOperationException.class);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cantToStringOnSubSequenceOfSubSequence() {
         final SecureCharBuffer buffer = givenSecureCharBuffer("NovaCrypto");
+        final CharSequence subSequence = buffer.subSequence(1, 5).subSequence(0, 2);
         //noinspection ResultOfMethodCallIgnored
-        buffer.subSequence(1, 5).subSequence(0, 2).toString();
+        assertThatThrownBy(subSequence::toString).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

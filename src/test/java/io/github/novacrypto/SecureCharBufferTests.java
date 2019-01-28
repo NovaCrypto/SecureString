@@ -1,6 +1,6 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2018 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -110,6 +110,42 @@ public final class SecureCharBufferTests {
         assertEquals(512, read.length());
         for (int i = 0; i < read.length(); i++) {
             assertEquals('\0', read.charAt(i));
+        }
+    }
+
+    @Test
+    public void readAndWriteAllBasicASCII() {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        for (int i = 0; i < 128; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(128, buffer.length());
+        for (int i = 0; i < 128; i++) {
+            assertEquals((char) i, readCharAt(buffer, i));
+        }
+    }
+
+    @Test
+    public void readAndWriteAllExtendedAscii() {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        for (int i = 128; i < 256; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(128, buffer.length());
+        for (int i = 128; i < 256; i++) {
+            assertEquals((char) i, readCharAt(buffer, i - 128));
+        }
+    }
+
+    @Test
+    public void readAndWriteAllLargeChars() {
+        SecureCharBuffer buffer = SecureCharBuffer.withCapacity(255 * 256);
+        for (int i = 256; i < 256 * 256; i++) {
+            buffer.append((char) i);
+        }
+        assertEquals(255 * 256, buffer.length());
+        for (int i = 256; i < 257; i++) {
+            assertEquals((char) i, readCharAt(buffer, i - 256));
         }
     }
 

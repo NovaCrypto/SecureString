@@ -1,6 +1,6 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2018 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public final class SecureCharBuffer implements Closeable, CharSequence {
         final int position = index * 2;
         final byte msb = buffer.get(position);
         final byte lsb = buffer.get(position + 1);
-        return (char) ((msb << 8) | lsb);
+        return (char) (msb << 8 | lsb & 0xff);
     }
 
     /**

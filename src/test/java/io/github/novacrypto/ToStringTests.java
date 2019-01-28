@@ -1,6 +1,6 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2018 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,17 +23,18 @@ package io.github.novacrypto;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 public final class ToStringTests {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void cantToString() {
         final SecureCharBuffer buffer = new SecureCharBuffer();
         buffer.append("NovaCrypto");
         //noinspection ResultOfMethodCallIgnored
-        String s = buffer.toString();
+        assertThatThrownBy(buffer::toString).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

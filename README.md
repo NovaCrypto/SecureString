@@ -26,7 +26,7 @@ Add dependency:
 
 ```
 dependencies {
-    compile 'io.github.novacrypto:SecureString:2018.10.06@jar'
+    compile 'io.github.novacrypto:SecureString:2019.01.27@jar'
 }
 
 ```
@@ -89,3 +89,7 @@ This `toString` generates on the demand, and does not cache the string value.
 ```
 buffer.close()
 ```
+
+## Changelog
+
+2019.01.27 contains a bug fix for characters outside standard ASCII range 0..127 which would not have been read correctly before.
