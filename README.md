@@ -26,7 +26,7 @@ Add dependency:
 
 ```
 dependencies {
-    compile 'io.github.novacrypto:SecureString:2019.01.27@jar'
+    compile 'io.github.novacrypto:securestring:2019.01.27@jar'
 }
 
 ```
