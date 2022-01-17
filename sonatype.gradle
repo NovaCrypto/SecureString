@@ -1,6 +1,6 @@
 /*
  *  ToRuntime library, Java promotions of checked exceptions to runtime exceptions
- *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2022 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
