@@ -1,6 +1,6 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
+ *  Copyright (C) 2017-2022 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,5 +19,5 @@
  *  You can contact the authors via github issues.
  */
 
-rootProject.name = 'securestring'
+rootProject.name = 'SecureString'
 

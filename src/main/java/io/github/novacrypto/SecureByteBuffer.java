@@ -1,6 +1,7 @@
 /*
  *  SecureString library, Obfuscated/clearable in memory string management
- *  Copyright (C) 2017-2019 Alan Evans, NovaCrypto
+ *
+ *  Copyright (C) 2017-2022 Alan Evans, NovaCrypto
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,13 +26,17 @@ import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * A store of char data that is encrypted with a one-time-pad.
  * Data is pinned outside of garbage collected heap.
  */
 public final class SecureByteBuffer implements Closeable {
+
+    /**
+     * This is threadsafe, and most of the time has no contention issues.
+     */
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     /**
      * @param capacity maximum number of chars for buffer to store
@@ -58,9 +63,8 @@ public final class SecureByteBuffer implements Closeable {
     }
 
     private static void populateBufferWithSecureKeyData(ByteBuffer key) {
-        final Random random = new SecureRandom();
-        final byte bytes[] = new byte[key.capacity()];
-        random.nextBytes(bytes);
+        final byte[] bytes = new byte[key.capacity()];
+        SECURE_RANDOM.nextBytes(bytes);
         key.put(bytes);
         Arrays.fill(bytes, (byte) 0);
     }

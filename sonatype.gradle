@@ -1,0 +1,152 @@
+/*
+ *  ToRuntime library, Java promotions of checked exceptions to runtime exceptions
+ *  Copyright (C) 2017-2022 Alan Evans, NovaCrypto
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *  Original source: https://github.com/NovaCrypto/ToRuntime
+ *  You can contact the authors via github issues.
+ */
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: 'jacoco'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = false
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+dependencyUpdates {
+    resolutionStrategy {
+        componentSelection { rules ->
+            rules.all { selection ->
+                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview'].any { qualifier ->
+                    selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+                }
+                if (rejected) {
+                    selection.reject('Release candidate')
+                }
+            }
+        }
+    }
+    outputFormatter = { result ->
+        if (!result.outdated.dependencies.isEmpty()) {
+            throw new RuntimeException('Abort, there are dependencies to update.')
+        }
+    }
+}
+
+task('installSharedIdea', type: Copy) {
+    description = "Copy the shared intellij files into local .idea/"
+    from 'ideaShared/'
+    into '.idea/'
+}
+
+def hasMavenCentralCredentials = hasProperty('ossrhUsername')
+def hasSigningDetails = hasProperty('signing.keyId')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.novacrypto'
+            artifactId = project.name
+            version = '2022.01.17'
+
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project.name
+                description = project.description
+                url = "https://github.com/NovaCrypto/${project.name}"
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'westonal'
+                        name = 'Alan Evans'
+                        email = 'thealanevans@gmail.com'
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/NovaCrypto/${project.name}.git"
+                    developerConnection = "scm:git:ssh://github.com/NovaCrypto/${project.name}.git"
+                    url = "https://github.com/NovaCrypto/${project.name}"
+                }
+            }
+        }
+    }
+    if (hasMavenCentralCredentials) {
+        repositories {
+            maven {
+                def stagingRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                def staging = !version.endsWith('SNAPSHOT')
+                url = staging ? stagingRepoUrl : snapshotsRepoUrl
+                tasks.create('displayPublishLocation') {
+                    doLast {
+                        println("Publishing $version to${staging ? " staging" : ""} $url")
+                        if (staging) {
+                            println("You will need to promote to a release at https://s01.oss.sonatype.org/#stagingRepositories")
+                        }
+                    }
+                }
+                credentials {
+                    // defined in the global local gradle.properties
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    if (hasMavenCentralCredentials) {
+        publish.dependsOn(displayPublishLocation)
+    }
+}
+
+if (hasSigningDetails) {
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
+check.dependsOn(dependencyUpdates)
+generatePomFileForMavenJavaPublication.dependsOn(check)
