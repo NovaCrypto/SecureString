@@ -19,64 +19,32 @@
  *  You can contact the authors via github issues.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
-    }
-}
-
 plugins {
-    id 'com.github.spotbugs' version '1.6.9'
+    id 'com.github.spotbugs' version '5.0.4'
+
+    // Generate a dependency version update report for release
+    // ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
+    // https://github.com/ben-manes/gradle-versions-plugin
+    id 'com.github.ben-manes.versions' version '0.41.0'
 }
 
-group 'io.github.novacrypto'
-version '2019.01.27'
+description = "Obfuscated/clearable in memory string management"
 
-apply plugin: 'java'
-apply from: 'bintray.gradle'
+apply plugin: 'java-library'
+apply from: 'sonatype.gradle'
 
-// Generate a dependency version update report for release
-// ./gradlew dependencyUpdates -Drevision=release
-// https://github.com/ben-manes/gradle-versions-plugin
-apply plugin: 'com.github.ben-manes.versions'
-
-spotbugs {
-    toolVersion = '3.1.11'
-}
-
-allprojects {
-    tasks.withType(com.github.spotbugs.SpotBugsTask) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-}
-
-// To upload a new version
-// ./gradlew clean build bintrayUpload -Puser=user -Pkey=APIKEY
-bintray {
-    user = project.ext.properties.user
-    key = project.ext.properties.key
-    publications = ['maven']
-    pkg {
-        repo = 'SecureString'
-        name = 'SecureString'
-        userOrg = 'novacrypto'
-        licenses = ['Unlicence']
-        vcsUrl = 'https://github.com/NovaCrypto/SecureString.git'
-        version {
-            name = project.version
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
         }
     }
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 compileJava {
@@ -85,8 +53,8 @@ compileJava {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
 }
 
 compileJava.options.encoding = 'UTF-8'

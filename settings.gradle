@@ -19,5 +19,5 @@
  *  You can contact the authors via github issues.
  */
 
-rootProject.name = 'securestring'
+rootProject.name = 'SecureString'
 

@@ -4,21 +4,11 @@ Read the motivation here: [Protecting Strings in JVM memory](https://medium.com/
 
 # Install
 
-Use either of these repositories:
+Using:
 
 ```
 repositories {
-    jcenter()
-}
-```
-
-Or:
-
-```
-repositories {
-    maven {
-        url 'https://dl.bintray.com/novacrypto/SecureString/'
-    }
+    mavenCentral()
 }
 ```
 
@@ -26,9 +16,8 @@ Add dependency:
 
 ```
 dependencies {
-    compile 'io.github.novacrypto:securestring:2019.01.27@jar'
+    implementation 'io.github.novacrypto:SecureString:2022.01.17@jar'
 }
-
 ```
 
 # Usage
@@ -93,3 +82,4 @@ buffer.close()
 ## Changelog
 
 2019.01.27 contains a bug fix for characters outside standard ASCII range 0..127 which would not have been read correctly before.
+2022.01.17 uses static `SecureRandom` on the advice of Spotbugs, and while it was a false positive intended for `Random` use warning, it's not a bad thing to do anyway.
