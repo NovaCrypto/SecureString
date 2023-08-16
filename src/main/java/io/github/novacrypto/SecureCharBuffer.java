@@ -23,6 +23,8 @@
 package io.github.novacrypto;
 
 import java.io.Closeable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A store of char data that is encrypted with a one-time-pad.
@@ -105,6 +107,21 @@ public final class SecureCharBuffer implements Closeable, CharSequence {
 
     public void close() {
         buffer.close();
+    }
+
+    /**
+     * @param delay delay in milliseconds before task is to be executed.
+     */
+    public void timout(int delay) {
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        buffer.close();
+                    }
+                },
+                delay
+        );
     }
 
     @Override

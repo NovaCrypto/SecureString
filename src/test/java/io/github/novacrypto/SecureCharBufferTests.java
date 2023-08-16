@@ -150,6 +150,20 @@ public final class SecureCharBufferTests {
         }
     }
 
+    @Test
+    public void testTimeout() throws InterruptedException {
+        SecureCharBuffer buffer = new SecureCharBuffer();
+        buffer.append("abc");
+        buffer.timout(1000);
+        Thread.sleep(1500);
+        final String read = readWholeBufferAsString(buffer);
+        assertEquals(512, buffer.length());
+        assertEquals(512, read.length());
+        for (int i = 0; i < read.length(); i++) {
+            assertEquals('\0', read.charAt(i));
+        }
+    }
+
     private static char readCharAt(SecureCharBuffer buffer, int index) {
         final char c1 = buffer.get(index);
         final char c2 = buffer.charAt(index);
